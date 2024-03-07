@@ -1,7 +1,6 @@
 import pickle
 from sklearn.model_selection import train_test_split
-from ModelMaster import KNN, SVM, RandomForest
-from CNN import CNN
+from ModelMaster import KNN, SVM, RandomForest, CNN
 from Utilities import Utilities
 
 def model_center(X_train,y_train,z,X_test,y_test):
@@ -25,7 +24,7 @@ def model_center(X_train,y_train,z,X_test,y_test):
     #     epochs=100,
     #     batch_size=32,
     #     patience=5,
-    #     learning_rate=0.001
+    #     learning_rate=0.0001
     # )
 
     KNN_MODEL = "knn_model.h5"
@@ -55,15 +54,15 @@ def model_center(X_train,y_train,z,X_test,y_test):
     )
 
     knn_model = pickle.load(open(KNN_MODEL, 'rb'))
-    # cnn_model = pickle.load(open(CNN_MODEL, 'rb'))
+    cnn_model = pickle.load(open(CNN_MODEL, 'rb'))
 
     utils.predict_chord(knn_model,X_test=X_test,z=z)
 
-    # print("\nCorrect order :\nAm Em G A F Dm C D B")
+    
 
-    # X_test, y_test, z_test = utils.prepare_data_for_cnn(TEST_PATH)
+    X_test, y_test, z_test = utils.prepare_data_for_cnn(TEST_PATH)
 
-    # cnn.predict_chord(cnn_model,X_test=X_test,z=z)
+    cnn.predict_chord(cnn_model,X_test=X_test,z=z)
 
 
 if __name__ == "__main__":
@@ -81,7 +80,8 @@ if __name__ == "__main__":
     
     X_train, y_train, z = utils.prepare_data(DATA_PATH)
 
-    TEST_PATH = "output/test/test_all_2.json"
+    TEST_PATH = "output/test/test_C.json"
+    
     X_test, y_test, z_test = utils.prepare_data(TEST_PATH)
 
     model_center(
@@ -92,7 +92,8 @@ if __name__ == "__main__":
         y_test=y_test
     )
 
-    # rf.GridSearcher(X_train=X_train,y_train=y_train)
+    # print("\nCorrect order :\nAm Em G A F Dm C D B")
+
     
 
 

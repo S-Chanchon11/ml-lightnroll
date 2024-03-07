@@ -12,7 +12,6 @@ from scipy.signal import spectrogram, convolve2d
 import json
 import sys
 import librosa
-import matplotlib.pyplot as plt
 from math import log2
 from scipy.io import wavfile
 from scipy.fft import fft

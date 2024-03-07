@@ -8,6 +8,7 @@ import csv
 
 DATASET_PATH = "guitar_chord/Training"
 DATA_TEST_PATH = "guitar_chord/Test"
+ALL_DATA_PATH = "guitar_chord/All"
 # JSON_PATH = "data_maj_chord_v1.json"
 
 
@@ -129,11 +130,11 @@ def write_to_csv(dataset_path,csv_path):
 
 if __name__ == "__main__":
 
-    JSON_PATH = "data_all_chord.json"
-    JSON_PATH_TEST = "output/test/test_all_2.json"
+    JSON_PATH = "output/data_all_dataset.json"
+    JSON_PATH_TEST = "output/test/test_B.json"
 
-    # preprocess_data_pcp(DATASET_PATH, JSON_PATH)
-    # write_to_csv(DATASET_PATH,csv_path="output_all_chord_.csv")
+    preprocess_data_pcp(ALL_DATA_PATH, JSON_PATH)
+    write_to_csv(ALL_DATA_PATH,csv_path="output/output_all_dataset.csv")
 
-    preprocess_data_pcp(DATA_TEST_PATH, JSON_PATH_TEST)
+    # preprocess_data_pcp(DATA_TEST_PATH, JSON_PATH_TEST)
     # write_to_csv(DATA_TEST_PATH,csv_path="output_test.csv")
