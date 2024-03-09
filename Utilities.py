@@ -3,6 +3,8 @@ import pickle
 import numpy as np
 import csv
 
+from sklearn.model_selection import GridSearchCV
+
 class Utilities:
 
     def prepare_data(self,path):
@@ -20,9 +22,6 @@ class Utilities:
         y = np.array(data["labels"])
         z = np.array(data["mapping"])
 
-        
-
-        
         return X, y, z
     
     def prepare_data_for_cnn(self,path):
@@ -98,10 +97,28 @@ class Utilities:
 
         file.close()
 
-    def predict_chord(self,model, X_test, z):
+    def predict_chord(self,model, X_test,y_test, z,z_test):
+
+        flg=0
 
         y_pred = model.predict(X_test)
         print("\nKNN:")
         
         for i in range(len(X_test)):
-            print(z[y_pred[i]],end=' ')
+            print(z[y_pred[i]],end=' ' )
+            if z[y_pred[i]] == z_test[i]:
+                    flg+=1
+        print(f"\nAccuracy = {flg}/{len(y_test)}")
+
+    def GridSearcher(self,X_train,y_train,model,param_grid):
+         
+        
+         
+        grid_search = GridSearchCV(
+            model, 
+            param_grid=param_grid
+        ) 
+        
+        grid_search.fit(X_train, y_train) 
+
+        print(grid_search.best_estimator_) 

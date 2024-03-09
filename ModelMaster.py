@@ -2,6 +2,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.model_selection import GridSearchCV
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neural_network import MLPClassifier
 from sklearn.svm import SVC
 import tensorflow as tf
 import numpy as np
@@ -12,7 +13,7 @@ utils = Utilities()
 
 class KNN:
 
-    def KNN(self,save_path,X,y,z,X_test,y_test,n_neighbors):
+    def KNN(self,save_path,X,y,z,X_test,y_test,z_test,n_neighbors):
 
         # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
 
@@ -24,7 +25,7 @@ class KNN:
         y_pred = model.predict(X_test)
         print("\nKNN:")
         for i in range(len(X_test)):
-            if y_test[i]!=y_pred[i]:
+            if y_test[i]==z_test[i]:
                 print(z[y_pred[i]],end=' ')
 
         print(accuracy_score(y_test, y_pred))
@@ -33,41 +34,65 @@ class KNN:
 
 class SVM:
 
-    def SVM(self,X,y,z,X_test,y_test,degree,save_path=''):
+    def SVM_linear(self,X,y,z,X_test,y_test,z_test,degree,save_path=''):
+
+        flg=0
 
         svclassifier_lin = SVC(
             kernel='linear',
             degree=degree
             )
+    
+        # Train the model using the training sets
+        svclassifier_lin.fit(X, y)
+
+        y_pred_lin = svclassifier_lin.predict(X_test)
+        print(len(z_test))
+        print("\nSVM linear: ")
+        for i in range(len(X_test)):
+            print(z[y_pred_lin[i]],end=' ' )
+            if z[y_pred_lin[i]] == z_test[i]:
+                flg+=1
+        print(f"\nAccuracy = {flg}/{len(y_test)}")
+        # print("\nAccuracy : ",accuracy_score(y_test, y_pred_lin)*100)
+
+            
+    def SVM_radial(self,X,y,z,X_test,y_test,z_test,degree,save_path=''):
+
+        flg=0
+
         svclassifier_rbf = SVC(
             kernel='rbf',
             degree=degree
             )
     
-        # Train the model using the training sets
-        svclassifier_lin.fit(X, y)
         svclassifier_rbf.fit(X, y)
 
-        y_pred_lin = svclassifier_lin.predict(X_test)
         y_pred_rbf = svclassifier_rbf.predict(X_test)
-
-        # tn, fp, fn, tp = confusion_matrix(y_test, y_pred_lin).ravel()
-
-        print("\nSVM linear: ")
-        for i in range(len(X_test)):
-            print(z[y_pred_lin[i]],end=' ' )
-        # print("\nAccuracy : ",accuracy_score(y_test, y_pred_lin)*100)
 
         print("\nSVM rbf: ")
         for i in range(len(X_test)):
             print(z[y_pred_rbf[i]],end=' ' )
+            if z[y_pred_rbf[i]] == z_test[i]:
+                flg+=1
+        print(f"\nAccuracy = {flg}/{len(y_test)}")
         # print("\nAccuracy : ",accuracy_score(y_test, y_pred_rbf)*100)
         
         # utils.save_model(model=svclassifier_lin,path=save_path)
 
 class RandomForest:
 
-    def RandomForest(self,X,y,z,X_test,y_test,max_depth, max_features, max_leaf_nodes):
+    def RandomForest(self,X,y,z,X_test,y_test,z_test,max_depth, max_features, max_leaf_nodes):
+
+        flg=0
+
+        # RandomForest_Param = {
+        #     'hidden_layer_sizes': [(10,30,10),(20,)],
+        #     'activation': ['tanh', 'relu'],
+        #     'solver': ['sgd', 'adam'],
+        #     'alpha': [0.0001, 0.05],
+        #     'learning_rate': ['constant','adaptive'],
+        # }
 
         rf = RandomForestClassifier(
             max_depth=max_depth, 
@@ -84,26 +109,14 @@ class RandomForest:
 
         print("\nRandomForest:")
         for i in range(len(X_test)):
-            if y_test[i]!=y_pred[i]:
-                print(z[y_pred[i]],end=' ')
+            print(z[y_pred[i]],end=' ')
 
-    def GridSearcher(self,X_train,y_train):
-         
-        param_grid = { 
-            'n_estimators': [25, 50, 100, 150], 
-            'max_features': ['sqrt', 'log2', None], 
-            'max_depth': [3, 6, 9], 
-            'max_leaf_nodes': [3, 6, 9], 
-        } 
-         
-        grid_search = GridSearchCV(
-            RandomForestClassifier(), 
-            param_grid=param_grid
-        ) 
-        
-        grid_search.fit(X_train, y_train) 
+            if z[y_pred[i]] == z_test[i]:
+                flg+=1
 
-        print(grid_search.best_estimator_) 
+        print(f"\nAccuracy = {flg}/{len(y_test)}")
+
+    
 
 class CNN:
     
@@ -113,7 +126,7 @@ class CNN:
 
         # 1st conv layer
         model.add(tf.keras.layers.Conv2D(
-            filters=128, 
+            filters=32, 
             kernel_size=(3, 3), 
             activation='relu', 
             input_shape=input_shape,
@@ -128,7 +141,7 @@ class CNN:
 
         # 2nd conv layer
         model.add(tf.keras.layers.Conv2D(
-            filters=64, 
+            filters=32, 
             kernel_size=(3, 3), 
             activation='relu', 
             input_shape=input_shape,
@@ -144,7 +157,7 @@ class CNN:
 
         # 3rd conv layer
         model.add(tf.keras.layers.Conv2D(
-            filters=32, 
+            filters=16, 
             kernel_size=(2, 2), 
             activation='relu', 
             input_shape=input_shape,
@@ -175,21 +188,6 @@ class CNN:
                     loss=loss,
                     metrics=["accuracy"]
                     )
-
-
-
-        # model = keras.Sequential([
-        #     keras.layers.Conv2D(128, (3,3), activation='relu', input_shape=input_shape,padding='same'),
-        #     keras.layers.MaxPooling2D(pool_size=(2, 2),padding='same'),
-        #     keras.layers.Conv2D(128,(3,3) , activation='relu',padding='same'),
-        #     keras.layers.MaxPooling2D(pool_size=(2, 2 ),padding='same'),
-        #     keras.layers.Dense(16),
-        #     keras.layers.Dense(8),
-        #     keras.layers.Flatten(),
-        #     keras.layers.Dense(2, activation='softmax')
-        # ])
-        # model.compile(optimizer=keras.optimizers.RMSprop(lr=learning_rate), loss='categorical_crossentropy'
-        # , metrics= ['accuracy'])
 
         model.summary()
 
@@ -231,7 +229,6 @@ class CNN:
             "B"
         ]
         
-        
         print("\nCNN:")
         
         # for i in range(len(X_test)):
@@ -240,4 +237,45 @@ class CNN:
         predicted_chord = _mapping[predicted_index]
         print(predicted_chord)
 
+class ANN:
+
+    def ANN(self,X,y,z,X_test,y_test,z_test):
+
+        flg=0
+
+        # ANN_Param = {
+        #     'hidden_layer_sizes': [(10,30,10),(20,)],
+        #     'activation': ['tanh', 'relu'],
+        #     'solver': ['sgd', 'adam'],
+        #     'alpha': [0.0001, 0.05],
+        #     'learning_rate': ['constant','adaptive'],
+        # }
+
+        model = MLPClassifier(
+            activation='relu', 
+            alpha=0.05, 
+            hidden_layer_sizes=(100, 300, 100),
+            solver='adam',
+            max_iter=300
+        ) 
+
+        model.fit(
+            X,
+            y
+        )
+
+        # utils.GridSearcher(
+        #     X_train=X,
+        #     y_train=y,
+        #     model=model,
+        #     param_grid=ANN_Param
+        #     )
+
+        y_pred = model.predict(X_test)
+        print("\nANN")
+        for i in range(len(X_test)):
+            print(z[y_pred[i]],end=' ' )
+            if z[y_pred[i]] == z_test[i]:
+                flg+=1
+        print(f"\nAccuracy = {flg}/{len(y_test)}")
 

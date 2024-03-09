@@ -79,7 +79,7 @@ def preprocess_data_pcp(dataset_path, json_path):
     with open(json_path, "w") as fp:
         #print(type(data))
         json.dump(data,fp, indent=4, cls=NumpyEncoder)
-
+        
 def write_to_csv(dataset_path,csv_path):
 
     for i, (dirpath, dirnames, filenames) in enumerate(os.walk(dataset_path)):
@@ -101,22 +101,24 @@ def write_to_csv(dataset_path,csv_path):
                     file_path = os.path.join(dirpath, f)
                     file_name2 = file_path.split("/")[-1].split(".")[0]
 
+                    pcp_list = my_enhanced_hpcp(audio_path=file_path, fref=261.63, pcp_num=12)
+
                     # process all segments of audio file
                     data = {
                         "mapping": semantic_label,
                         "order": file_name2,
-                        "pitch_C": my_enhanced_hpcp(audio_path=file_path, fref=261.63, pcp_num=12)[0],
-                        "pitch_C#": my_enhanced_hpcp(audio_path=file_path, fref=261.63, pcp_num=12)[1],
-                        "pitch_D": my_enhanced_hpcp(audio_path=file_path, fref=261.63, pcp_num=12)[2],
-                        "pitch_D#": my_enhanced_hpcp(audio_path=file_path, fref=261.63, pcp_num=12)[3],
-                        "pitch_E": my_enhanced_hpcp(audio_path=file_path, fref=261.63, pcp_num=12)[4],
-                        "pitch_F": my_enhanced_hpcp(audio_path=file_path, fref=261.63, pcp_num=12)[5],
-                        "pitch_F#": my_enhanced_hpcp(audio_path=file_path, fref=261.63, pcp_num=12)[6],
-                        "pitch_G": my_enhanced_hpcp(audio_path=file_path, fref=261.63, pcp_num=12)[7],
-                        "pitch_G#": my_enhanced_hpcp(audio_path=file_path, fref=261.63, pcp_num=12)[8],
-                        "pitch_A": my_enhanced_hpcp(audio_path=file_path, fref=261.63, pcp_num=12)[9],
-                        "pitch_A#": my_enhanced_hpcp(audio_path=file_path, fref=261.63, pcp_num=12)[10],
-                        "pitch_B": my_enhanced_hpcp(audio_path=file_path, fref=261.63, pcp_num=12)[11],
+                        "pitch_C": pcp_list[0],
+                        "pitch_C#": pcp_list[1],
+                        "pitch_D": pcp_list[2],
+                        "pitch_D#": pcp_list[3],
+                        "pitch_E": pcp_list[4],
+                        "pitch_F": pcp_list[5],
+                        "pitch_F#": pcp_list[6],
+                        "pitch_G": pcp_list[7],
+                        "pitch_G#": pcp_list[8],
+                        "pitch_A": pcp_list[9],
+                        "pitch_A#": pcp_list[10],
+                        "pitch_B": pcp_list[11],
                         "labels": i - 1,
                     }
 
@@ -131,10 +133,10 @@ def write_to_csv(dataset_path,csv_path):
 if __name__ == "__main__":
 
     JSON_PATH = "output/data_all_dataset.json"
-    JSON_PATH_TEST = "output/test/test_B.json"
+    JSON_PATH_TEST = "output/test/test_multi.json"
 
-    preprocess_data_pcp(ALL_DATA_PATH, JSON_PATH)
-    write_to_csv(ALL_DATA_PATH,csv_path="output/output_all_dataset.csv")
+    # preprocess_data_pcp(ALL_DATA_PATH, JSON_PATH)
+    # write_to_csv(ALL_DATA_PATH,csv_path="output/temp.csv")
 
-    # preprocess_data_pcp(DATA_TEST_PATH, JSON_PATH_TEST)
+    preprocess_data_pcp(DATA_TEST_PATH, JSON_PATH_TEST)
     # write_to_csv(DATA_TEST_PATH,csv_path="output_test.csv")
