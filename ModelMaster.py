@@ -3,6 +3,8 @@ from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.model_selection import GridSearchCV
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
+from sklearn.utils import _testing
+from sklearn.exceptions import ConvergenceWarning
 from sklearn.svm import SVC
 import tensorflow as tf
 import numpy as np
@@ -15,6 +17,8 @@ class KNN:
 
     def KNN(self,save_path,X,y,z,X_test,y_test,z_test,n_neighbors):
 
+        flg=0
+
         # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
 
         #Create a KNN Classifier
@@ -24,13 +28,19 @@ class KNN:
 
         y_pred = model.predict(X_test)
         print("\nKNN:")
+        # return z[y_pred[i]]
         for i in range(len(X_test)):
-            if y_test[i]==z_test[i]:
-                print(z[y_pred[i]],end=' ')
+            # if y_test[i]==z_test[i]:
+            print(z[y_pred[i]],end=' ')
+            # print(z_test.shape)
+            if z[y_pred[i]] == z_test[y_test[i]]:
+                flg+=1
 
-        print(accuracy_score(y_test, y_pred))
+        print(f"\nAccuracy = {flg}/{len(y_test)}")
 
-        utils.save_model(model=model,path=save_path)
+
+        # print(accuracy_score(y_test, y_pred))
+        # utils.save_model(model=model,path=save_path)
 
 class SVM:
 
@@ -47,11 +57,12 @@ class SVM:
         svclassifier_lin.fit(X, y)
 
         y_pred_lin = svclassifier_lin.predict(X_test)
-        print(len(z_test))
+     
         print("\nSVM linear: ")
+        # return z[y_pred_lin[i]]
         for i in range(len(X_test)):
             print(z[y_pred_lin[i]],end=' ' )
-            if z[y_pred_lin[i]] == z_test[i]:
+            if z[y_pred_lin[i]] == z_test[y_test[i]]:
                 flg+=1
         print(f"\nAccuracy = {flg}/{len(y_test)}")
         # print("\nAccuracy : ",accuracy_score(y_test, y_pred_lin)*100)
@@ -71,9 +82,10 @@ class SVM:
         y_pred_rbf = svclassifier_rbf.predict(X_test)
 
         print("\nSVM rbf: ")
+        # return z[y_pred_rbf[i]]
         for i in range(len(X_test)):
             print(z[y_pred_rbf[i]],end=' ' )
-            if z[y_pred_rbf[i]] == z_test[i]:
+            if z[y_pred_rbf[i]] == z_test[y_test[i]]:
                 flg+=1
         print(f"\nAccuracy = {flg}/{len(y_test)}")
         # print("\nAccuracy : ",accuracy_score(y_test, y_pred_rbf)*100)
@@ -106,12 +118,13 @@ class RandomForest:
             )
 
         y_pred = rf.predict(X_test)
-
         print("\nRandomForest:")
+        # return z[y_pred[i]]
+        
         for i in range(len(X_test)):
             print(z[y_pred[i]],end=' ')
 
-            if z[y_pred[i]] == z_test[i]:
+            if z[y_pred[i]] == z_test[y_test[i]]:
                 flg+=1
 
         print(f"\nAccuracy = {flg}/{len(y_test)}")
@@ -239,6 +252,7 @@ class CNN:
 
 class ANN:
 
+    @_testing.ignore_warnings(category=ConvergenceWarning)
     def ANN(self,X,y,z,X_test,y_test,z_test):
 
         flg=0
@@ -273,9 +287,11 @@ class ANN:
 
         y_pred = model.predict(X_test)
         print("\nANN")
+        # return z[y_pred[i]]
         for i in range(len(X_test)):
             print(z[y_pred[i]],end=' ' )
-            if z[y_pred[i]] == z_test[i]:
+
+            if z[y_pred[i]] == z_test[y_test[i]]:
                 flg+=1
         print(f"\nAccuracy = {flg}/{len(y_test)}")
 

@@ -58,7 +58,7 @@ def preprocess_data_pcp(dataset_path, json_path):
             print("\nProcessing: {}".format(semantic_label))
             
             # process all audio files in chord sub-dir
-            for f in filenames:
+            for f in sorted(filenames):
 
                 # load audio file
                 file_path = os.path.join(dirpath, f)
@@ -132,11 +132,11 @@ def write_to_csv(dataset_path,csv_path):
 
 if __name__ == "__main__":
 
-    JSON_PATH = "output/data_all_dataset.json"
-    JSON_PATH_TEST = "output/test/test_multi.json"
+    JSON_PATH = "output/data_all_chord_2.json"
+    JSON_PATH_TEST = "output/test/test_all_3.json"
 
-    # preprocess_data_pcp(ALL_DATA_PATH, JSON_PATH)
-    # write_to_csv(ALL_DATA_PATH,csv_path="output/temp.csv")
+    # preprocess_data_pcp(DATASET_PATH, JSON_PATH)
+    write_to_csv(DATASET_PATH,csv_path="output/data_all_chord_3.csv")
 
-    preprocess_data_pcp(DATA_TEST_PATH, JSON_PATH_TEST)
-    # write_to_csv(DATA_TEST_PATH,csv_path="output_test.csv")
+    # preprocess_data_pcp(DATA_TEST_PATH, JSON_PATH_TEST)
+    # write_to_csv(DATA_TEST_PATH,csv_path="output/output_test_all_3.csv")

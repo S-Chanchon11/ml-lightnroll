@@ -106,9 +106,9 @@ class Utilities:
         
         for i in range(len(X_test)):
             print(z[y_pred[i]],end=' ' )
-            if z[y_pred[i]] == z_test[i]:
-                    flg+=1
-        print(f"\nAccuracy = {flg}/{len(y_test)}")
+        #     if z[y_pred[i]] == z_test[i]:
+        #             flg+=1
+        # print(f"\nAccuracy = {flg}/{len(y_test)}")
 
     def GridSearcher(self,X_train,y_train,model,param_grid):
          
