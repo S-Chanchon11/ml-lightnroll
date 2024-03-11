@@ -32,7 +32,7 @@ class ModelMaster:
 
                 flg += 1
 
-        print(f"\nAccuracy = {flg}/{len(self.y_test)}")
+        # print(f"\nAccuracy = {flg}/{len(self.y_test)}")
 
         return chord_pred
 
@@ -76,6 +76,7 @@ class ModelMaster:
         pred_rf = self.predict(trained_rf)
 
         return pred_rf
+    
     
     @_testing.ignore_warnings(category=ConvergenceWarning)
     def ann(self,hidden_layer_sizes,activation,solver,alpha,max_iter):
