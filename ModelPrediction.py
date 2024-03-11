@@ -1,6 +1,16 @@
+import logging as logger
+import os
 from Constant import TEST_DATA, TRAIN_DATA
 from ModelMaster import ModelMaster
 from Utilities import Utilities
+
+logger.basicConfig(
+    format="%(asctime)s - %(message)s",
+    datefmt="%d-%b-%y %H:%M:%S",
+    level=logger.DEBUG,
+    filename="predicted_result.log",
+    filemode="a",
+)
 
 
 def main():
@@ -16,41 +26,32 @@ def main():
         z_train=z_train,
         X_test=X_test,
         y_test=y_test,
-        z_test=z_test
-        )
-    
-    knn = mm.knn(
-        n_neighbors=5
-        )
+        z_test=z_test,
+    )
 
-    rf = mm.rf(
-        n_estimators=100,
-        max_depth=6,
-        max_features="log2",
-        max_leaf_nodes=9
-        )
+    knn = mm.knn(n_neighbors=5)
+
+    rf = mm.rf(n_estimators=100, max_depth=6, max_features="log2", max_leaf_nodes=9)
 
     ann = mm.ann(
         hidden_layer_sizes=(100, 300, 100),
         activation="relu",
         solver="adam",
         alpha=0.05,
-        )
+        max_iter=300,
+    )
 
-    """
-        learning rate : less = slow = accurate, 
-        momentum rate : same as learning rate, alpha, 
-        max_iter : ดูที่loss, if consistent then stop
+    logger.debug("KNN : %s", knn)
+    logger.debug("RF : %s", rf)
+    logger.debug("ANN : %s", ann)
 
-    """
+    # print(f"\n{knn}\
+    #       \n{rf}\
+    #       \n{ann}\
+    #         ")
 
-    print(f"\n{knn}\
-          \n{rf}\
-          \n{ann}\
-            ")
 
-        
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     main()
 

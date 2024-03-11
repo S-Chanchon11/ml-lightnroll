@@ -16,3 +16,6 @@ class Logger:
                 writer.writerow(["filename", "target", "predict"])
 
             data = {"filename": filename, "target": target, "predict": predict}
+
+            writer.writerow(data.values())
+

@@ -77,9 +77,16 @@ class ModelMaster:
 
         return pred_rf
     
-    
+
     @_testing.ignore_warnings(category=ConvergenceWarning)
     def ann(self,hidden_layer_sizes,activation,solver,alpha,max_iter):
+
+        """
+        learning rate : less = slow = accurate, 
+        momentum rate : same as learning rate, alpha, 
+        max_iter : ดูที่loss, if consistent then stop
+
+        """
 
         ann = MLPClassifier(
             hidden_layer_sizes=hidden_layer_sizes,

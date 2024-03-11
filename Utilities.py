@@ -26,6 +26,7 @@ class Utilities:
     def save_model(self, model, path):
 
         with open(path, "wb") as file:
+            
             pickle.dump(model, file)
 
         file.close()
