@@ -90,10 +90,4 @@ class Utilities:
         #             flg+=1
         # print(f"\nAccuracy = {flg}/{len(y_test)}")
 
-    def GridSearcher(self, X_train, y_train, model, param_grid):
 
-        grid_search = GridSearchCV(model, param_grid=param_grid)
-
-        grid_search.fit(X_train, y_train)
-
-        print(grid_search.best_estimator_)
