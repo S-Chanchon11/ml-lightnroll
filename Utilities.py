@@ -5,14 +5,15 @@ import csv
 
 from sklearn.model_selection import GridSearchCV
 
+
 class Utilities:
 
-    def prepare_data(self,path):
+    def prepare_data(self, path):
         """Loads training dataset from json file.
-            :param data_path (str): Path to json file containing data
-            :return X (ndarray): Pitch
-            :return y (ndarray): Labels
-            :return z (ndarray): Mapping
+        :param data_path (str): Path to json file containing data
+        :return X (ndarray): Pitch
+        :return y (ndarray): Labels
+        :return z (ndarray): Mapping
         """
 
         with open(path, "r") as fp:
@@ -23,25 +24,8 @@ class Utilities:
         z = np.array(data["mapping"])
 
         return X, y, z
-    
-    def prepare_data_for_cnn(self,path):
-        """Loads training dataset from json file.
-            :param data_path (str): Path to json file containing data
-            :return X (ndarray): Inputs
-            :return y (ndarray): Targets
-        """
 
-        with open(path, "r") as fp:
-            data = json.load(fp)
 
-        X = np.array(data["pitch"])
-        y = np.array(data["labels"])
-        z = np.array(data["mapping"])
-
-        X = X[..., np.newaxis]
-        
-        return X, y, z
-    
     def load_data_csv(data_path):
 
         with open(data_path, "r") as fp:
@@ -49,7 +33,7 @@ class Utilities:
 
             # Skip the header row if it exists
             next(reader, None)
-            
+
             data = {}
             data["mapping"] = []
             data["pitch"] = []
@@ -67,7 +51,7 @@ class Utilities:
 
         print(np.array(data["pitch"]))
         return data
-    
+
     def train(model, epochs, batch_size, X_train, y_train):
         """Trains model
         :param epochs (int): Num training epochs
@@ -80,45 +64,36 @@ class Utilities:
 
         :return history: Training history
         """
-        
+
         # train model
-        history = model.fit(X_train,
-                            y_train,
-                            epochs=epochs,
-                            batch_size=batch_size)
-        
+        history = model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size)
+
         return history
 
+    def save_model(self, model, path):
 
-    def save_model(self,model,path):
-
-        with open(path, 'wb') as file:  
+        with open(path, "wb") as file:
             pickle.dump(model, file)
 
         file.close()
 
-    def predict_chord(self,model, X_test,y_test, z,z_test):
+    def predict_chord(self, model, X_test, y_test, z, z_test):
 
-        flg=0
+        flg = 0
 
         y_pred = model.predict(X_test)
         print("\nKNN:")
-        
+
         for i in range(len(X_test)):
-            print(z[y_pred[i]],end=' ' )
+            print(z[y_pred[i]], end=" ")
         #     if z[y_pred[i]] == z_test[i]:
         #             flg+=1
         # print(f"\nAccuracy = {flg}/{len(y_test)}")
 
-    def GridSearcher(self,X_train,y_train,model,param_grid):
-         
-        
-         
-        grid_search = GridSearchCV(
-            model, 
-            param_grid=param_grid
-        ) 
-        
-        grid_search.fit(X_train, y_train) 
+    def GridSearcher(self, X_train, y_train, model, param_grid):
 
-        print(grid_search.best_estimator_) 
+        grid_search = GridSearchCV(model, param_grid=param_grid)
+
+        grid_search.fit(X_train, y_train)
+
+        print(grid_search.best_estimator_)
