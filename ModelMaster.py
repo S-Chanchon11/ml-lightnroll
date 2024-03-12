@@ -32,24 +32,22 @@ class ModelMaster:
 
                 flg += 1
 
-        # print(f"\nAccuracy = {flg}/{len(self.y_test)}")
-
-        return chord_pred
+        return chord_pred, flg
 
     def train(self,model):
 
         model.fit(self.X_train, self.y_train)
 
         return model
+
+    def fine_tuning(self,model,param):
     
-    def fine_tuning(self,model,param_grid):
-        
-        grid_search = GridSearchCV(model, param_grid=param_grid)
+        grid_search = GridSearchCV(model, param)
 
         grid_search.fit(self.X_train, self.y_train)
 
-        print(grid_search.best_estimator_)
-    
+        return grid_search.best_estimator_
+
     def knn(self,n_neighbors):
 
         knn = KNeighborsClassifier(
@@ -58,9 +56,11 @@ class ModelMaster:
 
         trained_knn = self.train(knn)
 
-        pred_knn = self.predict(trained_knn)
+        param = trained_knn.get_params()
 
-        return pred_knn
+        pred_knn, acc = self.predict(trained_knn)
+
+        return pred_knn, acc, param
     
     def rf(self,n_estimators,max_depth, max_features, max_leaf_nodes):
 
@@ -73,13 +73,15 @@ class ModelMaster:
 
         trained_rf = self.train(rf)
 
-        pred_rf = self.predict(trained_rf)
+        param = trained_rf.get_params()
 
-        return pred_rf
+        pred_rf, acc = self.predict(trained_rf)
+
+        return pred_rf, acc, param
     
 
     @_testing.ignore_warnings(category=ConvergenceWarning)
-    def ann(self,hidden_layer_sizes,activation,solver,alpha,max_iter):
+    def ann(self,hidden_layer_sizes,activation,solver,alpha,max_iter,learning_rate,momentum):
 
         """
         learning rate : less = slow = accurate, 
@@ -94,16 +96,39 @@ class ModelMaster:
             solver=solver,
             alpha=alpha,
             max_iter=max_iter,
+            learning_rate=learning_rate,
+            momentum=momentum
         )
 
         trained_ann = self.train(ann)
 
-        pred_ann = self.predict(trained_ann)
+        param = trained_ann.get_params()
 
-        return pred_ann
+        pred_ann, acc = self.predict(trained_ann)
+
+        return pred_ann, acc, param
 
 
+class MagicParam:
 
+    def __init__(self):
+        self.RandomForestParam = {
+            'n_estimators':[80], 
+            'max_depth':[4], 
+            'max_features':['log2'], 
+            'max_leaf_nodes':[6]
+        }
+        self.ANNParam = {
+            'hidden_layer_sizes':[(100, 300, 100)],
+            'activation':["relu"],
+            'solver':["adam"],
+            'alpha':[0.05],
+            'max_iter':[300],
+            'learning_rate':["constant"],
+            'momentum':[0.9]
+        }
+    
+        
 
 
 
