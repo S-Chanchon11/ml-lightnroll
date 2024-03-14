@@ -1,9 +1,3 @@
-# split audio file into chuck for every frequency change??
-# split audio file into chuck for every time signature
-# how to know specific time? user input time signature and BPM
-#
-
-
 import librosa
 from pydub import AudioSegment
 
@@ -45,6 +39,9 @@ cut_points = [
     6.94276644,
     7.89478458,
 ]
-cut_duration_seconds = 1
+
+BPM = 60
+
+cut_duration_seconds = BPM/60
 
 cut_audio(input_audio_file, output_file_prefix, cut_points, cut_duration_seconds)

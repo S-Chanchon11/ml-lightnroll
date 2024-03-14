@@ -150,10 +150,10 @@ def write_to_csv(dataset_path, csv_path):
 
 if __name__ == "__main__":
 
-    JSON_PATH = "output/data_all_chord_2.json"
-    JSON_PATH_TEST = "output/test/test_all_3.json"
+    JSON_PATH = "output/data_all_chord_3.json"
+    # JSON_PATH_TEST = "output/test/test_all_3.json"
 
-    # preprocess_data_pcp(DATASET_PATH, JSON_PATH)
+    preprocess_data_pcp(DATASET_PATH, JSON_PATH)
     write_to_csv(DATASET_PATH, csv_path="output/data_all_chord_3.csv")
 
     # preprocess_data_pcp(DATA_TEST_PATH, JSON_PATH_TEST)

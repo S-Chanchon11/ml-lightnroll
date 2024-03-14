@@ -1,11 +1,11 @@
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import ConfusionMatrixDisplay, accuracy_score, classification_report, confusion_matrix
 from sklearn.model_selection import GridSearchCV
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.utils import _testing
 from sklearn.exceptions import ConvergenceWarning
-
+import matplotlib.pyplot as plt
 
 class ModelMaster:
 
@@ -19,10 +19,16 @@ class ModelMaster:
 
     def predict(self, model):
 
+        mp = MagicPlot()
+
         flg = 0
         chord_pred = []
 
         y_pred = model.predict(self.X_test)
+
+        cm = confusion_matrix(self.y_test,y_pred)
+
+        mp.plot_cm()
 
         for i in range(len(self.X_test)):
 
@@ -42,7 +48,7 @@ class ModelMaster:
 
     def fine_tuning(self,model,param):
     
-        grid_search = GridSearchCV(model, param)
+        grid_search = GridSearchCV(model, param, scoring='accuracy')
 
         grid_search.fit(self.X_train, self.y_train)
 
@@ -90,6 +96,7 @@ class ModelMaster:
 
         """
 
+
         ann = MLPClassifier(
             hidden_layer_sizes=hidden_layer_sizes,
             activation=activation,
@@ -109,24 +116,13 @@ class ModelMaster:
         return pred_ann, acc, param
 
 
-class MagicParam:
+class MagicPlot:
 
-    def __init__(self):
-        self.RandomForestParam = {
-            'n_estimators':[80], 
-            'max_depth':[4], 
-            'max_features':['log2'], 
-            'max_leaf_nodes':[6]
-        }
-        self.ANNParam = {
-            'hidden_layer_sizes':[(100, 300, 100)],
-            'activation':["relu"],
-            'solver':["adam"],
-            'alpha':[0.05],
-            'max_iter':[300],
-            'learning_rate':["constant"],
-            'momentum':[0.9]
-        }
+    def plot_cm(cm):
+        
+        disp = ConfusionMatrixDisplay(confusion_matrix=cm)
+        disp.plot()
+        plt.show()
     
         
 
