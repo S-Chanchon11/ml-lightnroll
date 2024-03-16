@@ -19,12 +19,15 @@ logger.basicConfig(
 )
 
 
-def init_data():
+def init_data(train_path,test_path):
 
     utils = Utilities()
 
-    X_train, y_train, z_train = utils.prepare_data(path=TRAIN_DATA)
-    X_test, y_test, z_test = utils.prepare_data(path=TEST_DATA)
+    X_train, y_train, z_train = utils.prepare_data(path=train_path)
+    X_test, y_test, z_test = utils.prepare_data(path=test_path)
+
+    print(X_train.shape)
+    print(y_train.shape)
 
     MM = ModelMaster(
         X_train=X_train,
@@ -47,7 +50,9 @@ def init_split_data():
 
     X_train, X_test, y_train, y_test = utils.split_data(X=X,y=y)
 
-
+    # print(X_train.shape)
+    # print(y_train.shape)
+    # print(z.shape)
     # logger.debug(z_test[y_test])
     
     MM = ModelMaster(
@@ -127,6 +132,7 @@ def prediction(MM:ModelMaster):
     # )
 
     ann3 = MM.ann(
+        name="ann_i.h5",
         hidden_layer_sizes=(200, 250, 150),
         activation="relu",
         solver="adam",
@@ -137,6 +143,7 @@ def prediction(MM:ModelMaster):
     )
 
     ann4 = MM.ann(
+        name="ann_ii.h5",
         hidden_layer_sizes=(150, 200, 100),
         activation="relu",
         solver="adam",
@@ -147,7 +154,8 @@ def prediction(MM:ModelMaster):
     )
 
     ann5 = MM.ann(
-        hidden_layer_sizes=(150, 200, 100),
+        name="ann_iii.h5",
+        hidden_layer_sizes=(120, 150, 100),
         activation="relu",
         solver="adam",
         alpha=0.05,
@@ -157,7 +165,7 @@ def prediction(MM:ModelMaster):
     )
 
 
-    return ann3,ann4,ann5
+    # return ann3,ann4,ann5
 
     """
     0 : result
@@ -166,48 +174,18 @@ def prediction(MM:ModelMaster):
     """
     
 
-    # logger.debug("KNN   : %d/30 %s", (knn1[1],knn1[2]))
-    # logger.debug("RF 1  : %d/30 %s", rf1[1],rf1[2])
-    # logger.debug("RF 2  : %d/30 %s", rf2[1],rf2[2])
-    # logger.debug("RF 3  : %d/30 %s", rf3[1],rf3[2])
-    # logger.debug("ANN 1 : %d/30 %s", ann1[1],ann1[2])
-    # logger.debug("ANN 2 : %d/30 %s", ann2[1],ann2[2])
-    # logger.debug("ANN 3 : %d/30 %s", ann3[1],ann3[2])
-    # logger.debug("ANN 4 : %d/30 %s", ann4[1],ann4[2])
-    # logger.debug("ANN 5 : %d/30 %s", ann5[1],ann5[2])
-
-    # logger.debug("RF 1  : %d/32", rf1[1])
-    # logger.debug("RF 2  : %d/32", rf2[1])
-    # logger.debug("RF 3  : %d/32", rf3[1])
-    # logger.debug("RF 4  : %d/32", rf4[1])
-    # logger.debug("ANN 1 : %d/32", ann1[1])
-    # logger.debug("ANN 2 : %d/32", ann2[1])
     # logger.debug("ANN 3 : %d/32", ann3[1])
     # logger.debug("ANN 4 : %d/32", ann4[1])
     # logger.debug("ANN 5 : %d/32", ann5[1])
-    # logger.debug("ANN 6 : %d/32", ann6[1])
-    
-    
-
-    # logger.debug("KNN   : %s", (knn1[0]))
-    # logger.debug("RF 1  : %s", rf1[0])
-    # logger.debug("RF 2  : %s", rf2[0])
-    # logger.debug("RF 3  : %s", rf3[0])
-    # logger.debug("ANN 1 : %s", ann1[0])
-    # logger.debug("ANN 2 : %s", ann2[0])
     # logger.debug("ANN 3 : %s", ann3[0])
     # logger.debug("ANN 4 : %s", ann4[0])
     # logger.debug("ANN 5 : %s", ann5[0])
-    # logger.debug("ANN 6 : %s", ann6[0])
-    
-    
-    
 
 def main():
 
-    # data = init_data()
+    data = init_data(TRAIN_DATA,TEST_DATA)
 
-    data = init_split_data()
+    # data = init_split_data()
 
 
     # result = fine_tuner(data)
@@ -215,7 +193,11 @@ def main():
 
     prediction(data)
 
-    # csv_path = "accuracy_improve_model_2.csv"
+    # print(pred[0][1])
+    # print(pred[1][1])
+    # print(pred[2][1])
+
+    # csv_path = "accuracy_improve_model_3.csv"
     # with open(csv_path, "a", newline="") as csv_file:
     #     writer = csv.writer(csv_file)
 

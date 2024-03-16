@@ -1,0 +1,33 @@
+import pickle
+
+from ModelPrediction import init_data
+from Preprocessing import preprocess_data_pcp
+from Utilities import Utilities
+
+DATA_TEST_PATH = "guitar_chord/Test"
+JSON_TEST_PATH = "sample.json"
+
+def main():
+
+    utils = Utilities()
+
+    preprocess_data_pcp(DATA_TEST_PATH,JSON_TEST_PATH)
+
+
+    X_test,y_test,z_test = utils.prepare_data(path=JSON_TEST_PATH)
+
+    ann1 = 'output/model/ann_i.h5'
+    ann2 = 'output/model/ann_ii.h5'
+    ann3 = 'output/model/ann_iii.h5'
+
+    load_ann1 = pickle.load(open(ann1, 'rb')) 
+    load_ann2 = pickle.load(open(ann2, 'rb')) 
+    load_ann3 = pickle.load(open(ann3, 'rb')) 
+
+    ann1_pred = load_ann1.predict(X_test)
+    ann2_pred = load_ann2.predict(X_test)
+    ann3_pred = load_ann3.predict(X_test)
+
+    print(ann1_pred)
+    print(ann2_pred)
+    print(ann3_pred)

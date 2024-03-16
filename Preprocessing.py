@@ -2,6 +2,7 @@ import librosa
 import os
 import json
 import numpy as np
+from Constant import TRAIN_DATA
 from PCP import PitchClassProfiler
 from HPCP import my_enhanced_hpcp
 import csv
@@ -150,11 +151,11 @@ def write_to_csv(dataset_path, csv_path):
 
 if __name__ == "__main__":
 
-    JSON_PATH = "output/data_all_chord_3.json"
+    JSON_PATH = "output/data_all_chord_4.json"
     # JSON_PATH_TEST = "output/test/test_all_3.json"
 
-    preprocess_data_pcp(DATASET_PATH, JSON_PATH)
-    write_to_csv(DATASET_PATH, csv_path="output/data_all_chord_3.csv")
+    preprocess_data_pcp(DATASET_PATH, TRAIN_DATA)
+    write_to_csv(DATASET_PATH, csv_path="output/data_all_chord_4.csv")
 
     # preprocess_data_pcp(DATA_TEST_PATH, JSON_PATH_TEST)
     # write_to_csv(DATA_TEST_PATH,csv_path="output/output_test_all_3.csv")
