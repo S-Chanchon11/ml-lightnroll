@@ -56,6 +56,8 @@ def init_split_data():
     # logger.debug(z_test[y_test])
     
     MM = ModelMaster(
+        X=X,
+        y=y,
         X_train=X_train,
         y_train=y_train,
         z_train=z,
@@ -107,32 +109,30 @@ def prediction(MM:ModelMaster):
 
     # rf3 = MM.rf(n_estimators=85, max_depth=4, max_features="log2", max_leaf_nodes=6)
 
-    # rf4 = MM.rf(max_depth=4, max_features='log2', max_leaf_nodes=8,n_estimators=80)
-
     # rf4 = MM.rf(n_estimators=90, max_depth=6, max_features="log2", max_leaf_nodes=6)
 
-    # ann1 = MM.ann(
-    #     hidden_layer_sizes=(100, 50, 100),
-    #     activation="relu",
-    #     solver="adam",
-    #     alpha=0.05,
-    #     max_iter=300,
-    #     learning_rate="constant",
-    #     momentum=0.9,
-    # )
+    ann1 = MM.ann(
+        hidden_layer_sizes=(100, 50, 100),
+        activation="relu",
+        solver="adam",
+        alpha=0.05,
+        max_iter=300,
+        learning_rate="constant",
+        momentum=0.9,
+    )
 
-    # ann2 = MM.ann(
-    #     hidden_layer_sizes=(150, 200, 100),
-    #     activation="relu",
-    #     solver="adam",
-    #     alpha=0.005,
-    #     max_iter=300,
-    #     learning_rate="constant",
-    #     momentum=0.9,
-    # )
+    ann2 = MM.ann(
+        hidden_layer_sizes=(150, 200, 100),
+        activation="relu",
+        solver="adam",
+        alpha=0.005,
+        max_iter=300,
+        learning_rate="constant",
+        momentum=0.9,
+    )
 
     ann3 = MM.ann(
-        name="ann_i.h5",
+        # name="ann_i.h5",
         hidden_layer_sizes=(200, 250, 150),
         activation="relu",
         solver="adam",
@@ -143,7 +143,7 @@ def prediction(MM:ModelMaster):
     )
 
     ann4 = MM.ann(
-        name="ann_ii.h5",
+        # name="ann_ii.h5",
         hidden_layer_sizes=(150, 200, 100),
         activation="relu",
         solver="adam",
@@ -154,7 +154,7 @@ def prediction(MM:ModelMaster):
     )
 
     ann5 = MM.ann(
-        name="ann_iii.h5",
+        # name="ann_iii.h5",
         hidden_layer_sizes=(120, 150, 100),
         activation="relu",
         solver="adam",
@@ -165,13 +165,13 @@ def prediction(MM:ModelMaster):
     )
 
 
-    # return ann3,ann4,ann5
+    return ann1,ann2,ann3,ann4,ann5
 
-    """
-    0 : result
-    1 : accuracy
-    2 : param
-    """
+    # """
+    # 0 : result
+    # 1 : accuracy
+    # 2 : param
+    # """
     
 
     # logger.debug("ANN 3 : %d/32", ann3[1])
@@ -183,21 +183,21 @@ def prediction(MM:ModelMaster):
 
 def main():
 
-    data = init_data(TRAIN_DATA,TEST_DATA)
+    # data = init_data(TRAIN_DATA,TEST_DATA)
 
-    # data = init_split_data()
+    data = init_split_data()
 
 
     # result = fine_tuner(data)
     # print(f"Best param : {result}")
-
-    prediction(data)
+    for i in range(10):
+        prediction(data)
 
     # print(pred[0][1])
     # print(pred[1][1])
     # print(pred[2][1])
 
-    # csv_path = "accuracy_improve_model_3.csv"
+    # csv_path = "accuracy_improve_model_601_1000.csv"
     # with open(csv_path, "a", newline="") as csv_file:
     #     writer = csv.writer(csv_file)
 
@@ -205,13 +205,19 @@ def main():
     #             writer.writerow(
     #                 [
     #                     "date-time",
+    #                     "RF1",
+    #                     "RF2",
+    #                     "RF3",
+    #                     "RF4",
+    #                     "ANN1",
+    #                     "ANN2",
     #                     "ANN3",
     #                     "ANN4",
     #                     "ANN5"
     #                 ]
     #             )
 
-    #     for i in range(200): 
+    #     for i in range(1): 
     #         data = init_split_data()   
     #         # print(".",end=' ')
     #         # time.sleep(3)
@@ -227,9 +233,15 @@ def main():
     #         # process all segments of audio file
     #         data = {
     #             "date-time":dt_string,
-    #             "ANN3":pred[0][1],
-    #             "ANN4":pred[1][1],
-    #             "ANN5":pred[2][1]
+    #             "RF1":pred[0][1],
+    #             "RF2":pred[1][1],
+    #             "RF3":pred[2][1],
+    #             "RF4":pred[3][1],
+    #             "ANN1":pred[4][1],
+    #             "ANN2":pred[5][1],
+    #             "ANN3":pred[6][1],
+    #             "ANN4":pred[7][1],
+    #             "ANN5":pred[8][1]
     #         }
     #         print(data)
     #         # write data to the csv file

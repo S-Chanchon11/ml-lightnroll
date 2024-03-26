@@ -1,5 +1,6 @@
 import json
 import pickle
+import librosa
 import numpy as np
 from sklearn.model_selection import train_test_split
 
@@ -35,7 +36,28 @@ class Utilities:
             )
         
         return X_train, X_test, y_train, y_test
+    
+def load():
 
+    file = '/Users/snow/ml-lightnroll/guitar_chord/All/A/A_DREAM_1.wav'
+    y, sr = librosa.load(file)
+    np.set_printoptions(threshold=np.inf)
+    print(y)
+    print(sr)
+
+    pitch, magnitudes = librosa.piptrack(y=y, sr=sr)
+
+    # Get the index of maximum value in pitch array
+    pitch_index = np.argmax(pitch, axis=0)
+
+    # Convert the index to pitch values
+    frequencies = librosa.fft_frequencies(sr=sr)
+    pitch_values = frequencies[pitch_index]
+
+    print(pitch_values)
+
+if __name__ == '__main__':
+    load()
 
     
 

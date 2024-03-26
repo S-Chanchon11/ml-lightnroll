@@ -1,7 +1,7 @@
 import pickle
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import ConfusionMatrixDisplay, accuracy_score, classification_report, confusion_matrix
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, cross_val_score
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.utils import _testing
@@ -10,7 +10,9 @@ import matplotlib.pyplot as plt
 
 class ModelMaster:
 
-    def __init__(self, X_train, y_train, z_train, X_test, y_test, z_test):
+    def __init__(self, X,y,X_train, y_train, z_train, X_test, y_test, z_test):
+        self.X = X
+        self.y = y
         self.X_train = X_train
         self.y_train = y_train
         self.z_train = z_train
@@ -24,12 +26,12 @@ class ModelMaster:
         chord_pred = []
 
         y_pred = model.predict(self.X_test)
-
-        # print(classification_report(self.y_test,y_pred))
-        # cm = confusion_matrix(self.y_test,y_pred)
+        # mp = MagicPlot(self.y_test,y_pred)
+        # # print(classification_report(self.y_test,y_pred))
+        # # cm = confusion_matrix(self.y_test,y_pred)
         # mp.plot_cm()
 
-        mp = MagicPlot(self.y_test,y_pred)
+        
         # mp.cr_report()
 
         for i in range(len(self.X_test)):
@@ -89,7 +91,7 @@ class ModelMaster:
     
 
     @_testing.ignore_warnings(category=ConvergenceWarning)
-    def ann(self,name,hidden_layer_sizes,activation,solver,alpha,max_iter,learning_rate,momentum):
+    def ann(self,hidden_layer_sizes,activation,solver,alpha,max_iter,learning_rate,momentum,name=''):
 
         """
         learning rate : less = slow = accurate, 
@@ -108,6 +110,9 @@ class ModelMaster:
             learning_rate=learning_rate,
             momentum=momentum
         )
+
+        scores = cross_val_score(ann, self.X, self.y, cv=5)
+        print("%0.2f accuracy with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
 
         trained_ann = self.train(ann)
 

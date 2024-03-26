@@ -68,26 +68,3 @@ class PitchClassProfiler:
         return self.pcp(X)
 
 
-class LongFileProfiler(PitchClassProfiler):
-    def __init__(self, file_name):
-        super().__init__(file_name)
-        self.current_pointer = 0
-        self.window = self.frequency() // 2
-        print(self.window)
-
-    def get_profile(self):
-        profiles_list = []
-        samples_count = len(self.samples())
-
-        while self.current_pointer < samples_count:
-            rigth_bound = self.current_pointer + self.window
-
-            if rigth_bound >= samples_count:
-                rigth_bound = samples_count - 1
-
-            window_samples = self.samples()[self.current_pointer : rigth_bound]
-            X = fft(window_samples)
-            profiles_list.append(self.pcp(X))
-
-            self.current_pointer += self.window
-        return profiles_list
