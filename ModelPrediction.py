@@ -112,6 +112,7 @@ def prediction(MM:ModelMaster):
     # rf4 = MM.rf(n_estimators=90, max_depth=6, max_features="log2", max_leaf_nodes=6)
 
     ann1 = MM.ann(
+        # name='ann_i_v2.h5',
         hidden_layer_sizes=(100, 50, 100),
         activation="relu",
         solver="adam",
@@ -121,8 +122,19 @@ def prediction(MM:ModelMaster):
         momentum=0.9,
     )
 
-    ann2 = MM.ann(
-        hidden_layer_sizes=(150, 200, 100),
+    # ann2 = MM.ann(
+    #     hidden_layer_sizes=(150, 200, 100),
+    #     activation="relu",
+    #     solver="adam",
+    #     alpha=0.005,
+    #     max_iter=300,
+    #     learning_rate="constant",
+    #     momentum=0.9,
+    # )
+
+    ann3 = MM.ann(
+        # name="ann_i.h5",
+        hidden_layer_sizes=(200, 250, 150),
         activation="relu",
         solver="adam",
         alpha=0.005,
@@ -131,27 +143,16 @@ def prediction(MM:ModelMaster):
         momentum=0.9,
     )
 
-    ann3 = MM.ann(
-        # name="ann_i.h5",
-        hidden_layer_sizes=(200, 250, 150),
-        activation="relu",
-        solver="adam",
-        alpha=0.05,
-        max_iter=300,
-        learning_rate="constant",
-        momentum=0.9,
-    )
-
-    ann4 = MM.ann(
-        # name="ann_ii.h5",
-        hidden_layer_sizes=(150, 200, 100),
-        activation="relu",
-        solver="adam",
-        alpha=0.05,
-        max_iter=300,
-        learning_rate="constant",
-        momentum=0.9,
-    )
+    # ann4 = MM.ann(
+    #     # name="ann_ii.h5",
+    #     hidden_layer_sizes=(150, 200, 100),
+    #     activation="relu",
+    #     solver="adam",
+    #     alpha=0.05,
+    #     max_iter=300,
+    #     learning_rate="constant",
+    #     momentum=0.9,
+    # )
 
     ann5 = MM.ann(
         # name="ann_iii.h5",
@@ -161,11 +162,11 @@ def prediction(MM:ModelMaster):
         alpha=0.05,
         max_iter=400,
         learning_rate="constant",
-        momentum=0.9,
+        momentum=0.9
     )
 
 
-    return ann1,ann2,ann3,ann4,ann5
+    return ann1,ann3,ann5
 
     # """
     # 0 : result
@@ -190,8 +191,8 @@ def main():
 
     # result = fine_tuner(data)
     # print(f"Best param : {result}")
-    for i in range(10):
-        prediction(data)
+    # for i in range(10):
+    prediction(data)
 
     # print(pred[0][1])
     # print(pred[1][1])

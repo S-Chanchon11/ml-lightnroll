@@ -26,10 +26,10 @@ class ModelMaster:
         chord_pred = []
 
         y_pred = model.predict(self.X_test)
-        # mp = MagicPlot(self.y_test,y_pred)
+        mp = MagicPlot(self.y_test,y_pred)
         # # print(classification_report(self.y_test,y_pred))
-        # # cm = confusion_matrix(self.y_test,y_pred)
-        # mp.plot_cm()
+        cm = confusion_matrix(self.y_test,y_pred)
+        mp.plot_cm()
 
         
         # mp.cr_report()
@@ -111,8 +111,8 @@ class ModelMaster:
             momentum=momentum
         )
 
-        scores = cross_val_score(ann, self.X, self.y, cv=5)
-        print("%0.2f accuracy with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
+        # scores = cross_val_score(ann, self.X, self.y, cv=5)
+        # print("%0.2f accuracy with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
 
         trained_ann = self.train(ann)
 

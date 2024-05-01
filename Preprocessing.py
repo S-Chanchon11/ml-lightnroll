@@ -7,9 +7,7 @@ from PCP import PitchClassProfiler
 from HPCP import my_enhanced_hpcp
 import csv
 
-DATASET_PATH = "guitar_chord/Training"
-DATA_TEST_PATH = "guitar_chord/Test"
-ALL_DATA_PATH = "guitar_chord/All"
+
 # JSON_PATH = "data_maj_chord_v1.json"
 
 
@@ -150,12 +148,16 @@ def write_to_csv(dataset_path, csv_path):
 
 
 if __name__ == "__main__":
+    
+    DATASET_PATH = "guitar_chord/Training"
+    DATA_TEST_PATH = "guitar_chord/Test"
+    ALL_DATA_PATH = "guitar_chord/All"
 
-    JSON_PATH = "output/data_all_chord_4.json"
+    # JSON_PATH = "output/data_all_chord_5.json"
     # JSON_PATH_TEST = "output/test/test_all_3.json"
 
-    preprocess_data_pcp(DATASET_PATH, TRAIN_DATA)
-    write_to_csv(DATASET_PATH, csv_path="output/data_all_chord_4.csv")
+    preprocess_data_pcp(DATASET_PATH,json_path="output/data_all_chord_5.json")
+    write_to_csv(DATASET_PATH, csv_path="output/data_all_chord_5.csv")
 
     # preprocess_data_pcp(DATA_TEST_PATH, JSON_PATH_TEST)
     # write_to_csv(DATA_TEST_PATH,csv_path="output/output_test_all_3.csv")
