@@ -26,11 +26,10 @@ class Utilities:
     
     def split_data(self, X, y):
 
-        
         X_train, X_test, y_train, y_test = train_test_split(
             X, 
             y,
-            test_size=0.25,
+            test_size=0.20, 
             shuffle=True,
             stratify=y
             )
